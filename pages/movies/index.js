@@ -49,7 +49,13 @@ export async function getStaticProps() {
   const data = JSON.parse(jsonData);
 
   const movies = data.movies;
-  const genres = [...new Set(movies.map((movie) => movie.genre))];
+
+  // Fix: Remove undefined/null genres before making the list
+  const validGenres = movies
+    .map((movie) => movie.genre)
+    .filter((genre) => genre !== undefined && genre !== null);
+
+  const genres = [...new Set(validGenres)];
 
   return {
     props: {
